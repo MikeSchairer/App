@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LogoMark } from './Logo';
 import { useTheme } from '../context/ThemeContext';
+import { RESUME_URL } from '../data/projects';
 import { Menu, X, ArrowUpRight, FileText, ChevronRight, Sun, Moon } from 'lucide-react';
 
 interface NavbarProps {
@@ -52,7 +53,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onContactClick }) => {
   };
 
   const handleResumeClick = () => {
-    window.open('/Michael_Schairer_Resume.pdf', '_blank', 'noopener,noreferrer');
+    window.open(RESUME_URL, '_blank', 'noopener,noreferrer');
   };
 
   return (

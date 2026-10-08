@@ -10,6 +10,18 @@ export interface PortfolioItem {
   technologies: string[];
 }
 
+/**
+ * Robust asset resolver that respects Vite's base path for GitHub Pages and subpaths
+ */
+export const getAssetUrl = (path: string): string => {
+  const base = import.meta.env.BASE_URL || './';
+  const cleanBase = base.endsWith('/') ? base : `${base}/`;
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  return `${cleanBase}${cleanPath}`;
+};
+
+export const RESUME_URL = getAssetUrl('Michael_Schairer_Resume.pdf');
+
 export const REAL_PORTFOLIO: PortfolioItem[] = [
   {
     id: 'badger-tobacco',
@@ -17,7 +29,7 @@ export const REAL_PORTFOLIO: PortfolioItem[] = [
     subtitle: 'Website Design, Development & Coding',
     category: 'websites',
     categoryLabel: 'Website & Development',
-    image: '/src/assets/images/portfolio/BadgerTobacco.png',
+    image: getAssetUrl('images/BadgerTobacco.png'),
     description: 'Full custom website design, responsive frontend layout, and development for Badger Tobacco.',
     details: 'Created an engaging commercial web presence featuring responsive layouts, custom product catalog navigation, and brand identity styling.',
     technologies: ['HTML5', 'CSS3', 'JavaScript', 'Responsive UI', 'PHP']
@@ -28,7 +40,7 @@ export const REAL_PORTFOLIO: PortfolioItem[] = [
     subtitle: 'Website Design',
     category: 'websites',
     categoryLabel: 'Website Design',
-    image: '/src/assets/images/portfolio/FromTheGroundUPLawnCare.png',
+    image: getAssetUrl('images/FromTheGroundUPLawnCare.png'),
     description: 'Clean, modern website design for a professional outdoor landscaping and lawn care company.',
     details: 'Designed an intuitive user journey highlighting service packages, quotation inquiry workflows, and high-visibility contact touchpoints.',
     technologies: ['Web Design', 'UI/UX', 'Responsive Layout', 'Graphic Design']
@@ -39,7 +51,7 @@ export const REAL_PORTFOLIO: PortfolioItem[] = [
     subtitle: 'Website Design, Development & Coding',
     category: 'websites',
     categoryLabel: 'Website & Development',
-    image: '/src/assets/images/portfolio/HFHRestore.png',
+    image: getAssetUrl('images/HFHRestore.png'),
     description: 'Custom community portal and non-profit retail showcase for Habitat For Humanity ReStore.',
     details: 'Built an accessible and responsive website to drive volunteer participation, donor drop-offs, and store visitor engagement.',
     technologies: ['HTML5', 'CSS3', 'JavaScript', 'UI/UX', 'CMS']
@@ -50,7 +62,7 @@ export const REAL_PORTFOLIO: PortfolioItem[] = [
     subtitle: 'Website Design',
     category: 'websites',
     categoryLabel: 'Website Design',
-    image: '/src/assets/images/portfolio/FoxLakeDesign.png',
+    image: getAssetUrl('images/FoxLakeDesign.png'),
     description: 'Official municipal website design for the Fox Lake Fire & Emergency Services.',
     details: 'Crafted a clear, emergency-ready public informational platform with community safety resources and station directories.',
     technologies: ['Web Design', 'Information Architecture', 'Responsive UI']
@@ -61,7 +73,7 @@ export const REAL_PORTFOLIO: PortfolioItem[] = [
     subtitle: 'Website Design, Development & Coding',
     category: 'websites',
     categoryLabel: 'Website & E-Commerce',
-    image: '/src/assets/images/portfolio/CircleCityTickets.png',
+    image: getAssetUrl('images/CircleCityTickets.png'),
     description: 'High-volume ticket broker e-commerce storefront with interactive event seating listings.',
     details: 'Designed and engineered a complete ticketing platform integrating real-time inventory databases and responsive mobile checkout.',
     technologies: ['Web Development', 'E-Commerce', 'ASP.NET', 'SQL Server', 'JavaScript']
@@ -72,7 +84,7 @@ export const REAL_PORTFOLIO: PortfolioItem[] = [
     subtitle: 'Website Design, Development & Coding',
     category: 'websites',
     categoryLabel: 'Website & Development',
-    image: '/src/assets/images/portfolio/CBO_Home_Page.png',
+    image: getAssetUrl('images/CBO_Home_Page.png'),
     description: 'Premier national ticketing and entertainment event platform for Canadian venues.',
     details: 'Engineered high-performance event discovery pages, interactive seat maps, and secure checkout flows.',
     technologies: ['HTML5', 'CSS3', 'JavaScript', 'Database Integration', 'UI/UX']
@@ -83,7 +95,7 @@ export const REAL_PORTFOLIO: PortfolioItem[] = [
     subtitle: 'Website Design, Development & Coding',
     category: 'websites',
     categoryLabel: 'Website & Development',
-    image: '/src/assets/images/portfolio/SeatHub.png',
+    image: getAssetUrl('images/SeatHub.png'),
     description: 'Interactive sports, concert, and theatre event ticketing portal.',
     details: 'Developed a dynamic ticketing application with rapid filtering, venue diagrams, and mobile-optimized booking.',
     technologies: ['Web Design', 'Frontend Development', 'API Feeds', 'CSS3']
@@ -94,7 +106,7 @@ export const REAL_PORTFOLIO: PortfolioItem[] = [
     subtitle: 'Website Design, Development & Coding',
     category: 'websites',
     categoryLabel: 'Website & Development',
-    image: '/src/assets/images/portfolio/TheTicketCloud.png',
+    image: getAssetUrl('images/TheTicketCloud.png'),
     description: 'Cloud-enabled secondary ticketing marketplace with sleek dark-contrast interfaces.',
     details: 'Built modern web layouts and API-connected event search engines for nationwide sports and entertainment tours.',
     technologies: ['Web Coding', 'UI/UX', 'JavaScript', 'Responsive Grid']
@@ -105,7 +117,7 @@ export const REAL_PORTFOLIO: PortfolioItem[] = [
     subtitle: 'Website Design, Development & Coding',
     category: 'websites',
     categoryLabel: 'Website & Development',
-    image: '/src/assets/images/portfolio/EncoreTicketStore.png',
+    image: getAssetUrl('images/EncoreTicketStore.png'),
     description: 'Full-featured entertainment ticketing portal and brand design.',
     details: 'Complete design and frontend build with streamlined search filters and branded promotional banners.',
     technologies: ['E-Commerce', 'Web Design', 'JavaScript', 'HTML5']
@@ -116,7 +128,7 @@ export const REAL_PORTFOLIO: PortfolioItem[] = [
     subtitle: 'Website Design, Development & Coding',
     category: 'websites',
     categoryLabel: 'Website & Development',
-    image: '/src/assets/images/portfolio/FrontRowSeats.png',
+    image: getAssetUrl('images/FrontRowSeats.png'),
     description: 'VIP sports and concert ticket portal with interactive stadium section views.',
     details: 'Developed high-conversion landing pages and interactive event grids for premium seating access.',
     technologies: ['Web Development', 'UI Design', 'CSS3', 'SQL Server']
@@ -127,7 +139,7 @@ export const REAL_PORTFOLIO: PortfolioItem[] = [
     subtitle: 'Facebook Banner & Profile Picture',
     category: 'graphic-design',
     categoryLabel: 'Branding & Social Media',
-    image: '/src/assets/images/portfolio/FacebookPage.png',
+    image: getAssetUrl('images/FacebookPage.png'),
     description: 'Branded social media header identity and corporate Facebook page graphics.',
     details: 'Created punchy, high-resolution social marketing graphics to build trust and brand recognition for commercial asphalt contractors.',
     technologies: ['Graphic Design', 'Adobe Photoshop', 'Social Media Branding']
@@ -138,7 +150,7 @@ export const REAL_PORTFOLIO: PortfolioItem[] = [
     subtitle: 'Custom Facebook Advertisements & Posts',
     category: 'graphic-design',
     categoryLabel: 'Digital Advertising',
-    image: '/src/assets/images/portfolio/FacebookAd.png',
+    image: getAssetUrl('images/FacebookAd.png'),
     description: 'Promotional ad graphics and lead-generation social campaigns.',
     details: 'Designed eye-catching digital advertisements highlighting seasonal paving specials and residential driveways.',
     technologies: ['Digital Ad Design', 'Adobe Photoshop', 'Marketing Collateral']
@@ -149,7 +161,7 @@ export const REAL_PORTFOLIO: PortfolioItem[] = [
     subtitle: 'Custom E-Mail Advertisements',
     category: 'email-ads',
     categoryLabel: 'Email Marketing',
-    image: '/src/assets/images/portfolio/EmailBlast02.png',
+    image: getAssetUrl('images/EmailBlast02.png'),
     description: 'High-conversion HTML email blast and newsletter design for major sports playoffs.',
     details: 'Coded table-based, cross-client compatible HTML email templates with dynamic promotional event headers.',
     technologies: ['HTML Email Coding', 'Graphic Design', 'Email Marketing']
@@ -160,7 +172,7 @@ export const REAL_PORTFOLIO: PortfolioItem[] = [
     subtitle: 'Custom E-Mail Advertisements',
     category: 'email-ads',
     categoryLabel: 'Email Marketing',
-    image: '/src/assets/images/portfolio/EmailBlast01.jpg',
+    image: getAssetUrl('images/EmailBlast01.jpg'),
     description: 'Broadway and West End promotional newsletter blast with custom typographic headers.',
     details: 'Designed and coded rich media email campaigns for theatre lovers, driving ticket sales for top-billed musicals.',
     technologies: ['Email Design', 'Typography', 'HTML Email Blast']
@@ -171,7 +183,7 @@ export const REAL_PORTFOLIO: PortfolioItem[] = [
     subtitle: 'Custom E-Mail Advertisements',
     category: 'email-ads',
     categoryLabel: 'Email Marketing',
-    image: '/src/assets/images/portfolio/EmailBlast.png',
+    image: getAssetUrl('images/EmailBlast.png'),
     description: 'Festivals and concert tour promotional email marketing campaign.',
     details: 'Delivered eye-catching responsive email layouts optimized for mobile inboxes and desktop clients alike.',
     technologies: ['Email Marketing', 'Digital Advertising', 'Graphic Design']

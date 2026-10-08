@@ -1,5 +1,6 @@
 import React from 'react';
 import { LogoMark } from './Logo';
+import { RESUME_URL } from '../data/projects';
 import { ArrowUp, FileText, Mail, Github, Linkedin, ExternalLink } from 'lucide-react';
 
 export const Footer: React.FC = () => {
@@ -72,7 +73,7 @@ export const Footer: React.FC = () => {
             </div>
             <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 justify-center md:justify-start">
               <a
-                href="/Michael_Schairer_Resume.pdf"
+                href={RESUME_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center md:justify-start gap-2 px-3.5 py-2.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-mono text-[#39ff14] hover:border-[#39ff14]/50 transition-all min-h-[44px]"

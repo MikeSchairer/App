@@ -1,11 +1,11 @@
 import React from 'react';
-import { EDUCATION_DATA, EXPERIENCE_DATA } from '../data/projects';
+import { EDUCATION_DATA, EXPERIENCE_DATA, RESUME_URL } from '../data/projects';
 import { StaggerContainer, StaggerItem } from './ScrollReveal';
 import { User, GraduationCap, Briefcase, FileText, ArrowUpRight } from 'lucide-react';
 
 export const AboutSection: React.FC = () => {
   const handleResumeClick = () => {
-    window.open('/Michael_Schairer_Resume.pdf', '_blank', 'noopener,noreferrer');
+    window.open(RESUME_URL, '_blank', 'noopener,noreferrer');
   };
 
   return (

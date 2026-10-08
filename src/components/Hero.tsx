@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrandLockup } from './Logo';
 import { ParticleBackground } from './ParticleBackground';
+import { RESUME_URL } from '../data/projects';
 import { ArrowDown, FileText, Check, Copy, ExternalLink, Sparkles } from 'lucide-react';
 
 interface HeroProps {
@@ -19,7 +20,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onContactClick }) =>
   };
 
   const handleResumeClick = () => {
-    window.open('/Michael_Schairer_Resume.pdf', '_blank', 'noopener,noreferrer');
+    window.open(RESUME_URL, '_blank', 'noopener,noreferrer');
   };
 
   return (
