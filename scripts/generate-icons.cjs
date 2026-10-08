@@ -58,6 +58,14 @@ async function run() {
     .png()
     .toFile('public/apple-touch-icon-precomposed.png');
 
+  // 1b. logo-preview.png (512x512) - High-res square logo preview with solid dark background for iMessage / SMS / WhatsApp
+  const logoPreviewSvg = createIconSvg(512, 0.75, 0);
+  await sharp(Buffer.from(logoPreviewSvg))
+    .resize(512, 512)
+    .png()
+    .toFile('public/logo-preview.png');
+  console.log('✓ Created public/logo-preview.png (512x512)');
+
   // 2. icon-192x192.png (standard Android / PWA)
   const icon192Svg = createIconSvg(192, 0.75, 24);
   await sharp(Buffer.from(icon192Svg))
