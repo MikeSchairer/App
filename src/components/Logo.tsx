@@ -47,7 +47,6 @@ export const LogoMark: React.FC<LogoProps> = ({
     <stop offset="100%" stop-color="#B6FF00"/>
   </linearGradient>
 
-  <!-- Wide, soft ambient neon glow -->
   <filter id="ambientGlow" x="-80%" y="-80%" width="260%" height="260%" color-interpolation-filters="sRGB">
     <feGaussianBlur in="SourceGraphic" stdDeviation="24" result="blurWide"/>
     <feColorMatrix in="blurWide" type="matrix"
