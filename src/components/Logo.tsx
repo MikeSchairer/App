@@ -37,7 +37,7 @@ export const LogoMark: React.FC<LogoProps> = ({
         interactive ? 'transition-transform duration-300 hover:scale-105 active:scale-95' : ''
       } ${className}`}
     >
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1281 936" width="1281" height="936">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1281 936" width="356" height="260">
 <defs>
   <linearGradient id="neonLimeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
     <stop offset="0%" stop-color="#F2FF5A"/>
