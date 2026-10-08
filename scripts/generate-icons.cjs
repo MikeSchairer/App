@@ -26,16 +26,10 @@ async function run() {
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
   <defs>
     ${defs}
-    <radialGradient id="iconBgGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#142812" stop-opacity="0.8"/>
-      <stop offset="60%" stop-color="#07090b" stop-opacity="0.95"/>
-      <stop offset="100%" stop-color="#050708" stop-opacity="1"/>
-    </radialGradient>
   </defs>
 
-  <!-- Background -->
-  <rect width="${size}" height="${size}" rx="${rx}" fill="url(#iconBgGlow)"/>
-  <rect width="${size - 2}" height="${size - 2}" x="1" y="1" rx="${rx}" fill="none" stroke="#39ff14" stroke-opacity="0.25" stroke-width="1.5"/>
+  <!-- Solid Pure Black Background -->
+  <rect width="${size}" height="${size}" rx="${rx}" fill="#000000"/>
 
   <!-- Centered MS Monogram Logo -->
   <g transform="translate(${offsetX.toFixed(2)}, ${offsetY.toFixed(2)}) scale(${(logoW / 1281).toFixed(4)})">
@@ -43,6 +37,44 @@ async function run() {
   </g>
 </svg>`;
   }
+
+  // Helper for rectangular cards (e.g. 1200x630 og-image)
+  function createRectSvg(width, height, scale = 0.58) {
+    const logoW = width * scale;
+    const logoH = logoW * (936 / 1281);
+    const offsetX = (width - logoW) / 2;
+    const offsetY = (height - logoH) / 2;
+
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
+  <defs>
+    ${defs}
+  </defs>
+
+  <!-- Solid Pure Black Background -->
+  <rect width="${width}" height="${height}" fill="#000000"/>
+
+  <!-- Centered MS Monogram Logo -->
+  <g transform="translate(${offsetX.toFixed(2)}, ${offsetY.toFixed(2)}) scale(${(logoW / 1281).toFixed(4)})">
+    ${innerContent}
+  </g>
+</svg>`;
+  }
+
+  // 0. og-image.png (1200x630) and og-logo.png (800x584) - logo only on black background
+  const og1200Svg = createRectSvg(1200, 630, 0.58);
+  await sharp(Buffer.from(og1200Svg))
+    .resize(1200, 630)
+    .png()
+    .toFile('public/og-image.png');
+  console.log('✓ Created public/og-image.png (1200x630 logo only on black background)');
+
+  const og800Svg = createRectSvg(800, 584, 0.75);
+  await sharp(Buffer.from(og800Svg))
+    .resize(800, 584)
+    .png()
+    .toFile('public/og-logo.png');
+  console.log('✓ Created public/og-logo.png (800x584 logo only on black background)');
 
   // 1. apple-touch-icon.png (180x180) - iOS applies its own rounded corner mask, so square canvas
   const appleSvg = createIconSvg(180, 0.75, 0);

@@ -295,7 +295,7 @@ export const EXPERIENCE_DATA = [
     role: 'Web Coder & Graphic Designer',
     company: 'Freelancer',
     period: '2008 — Present',
-    description: 'Delivering end-to-end custom websites, branding, digital marketing collateral, and full-stack solutions for over 100+ businesses and organizations.',
+    description: 'Delivering end-to-end custom websites, branding, digital marketing collateral, and front-end solutions for over 100+ businesses and organizations.',
   },
   {
     role: 'Web Design & Coding Manager',
