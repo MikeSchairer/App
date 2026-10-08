@@ -169,7 +169,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onContactClick }) => {
           FULL-HEIGHT, HIGH-CONTRAST MOBILE DRAWER NAVIGATION
           ======================================================== */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-16 sm:top-20 bottom-0 bg-[#07090b]/98 backdrop-blur-2xl border-t border-white/[0.1] z-50 flex flex-col justify-between overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200 px-6 py-6 pb-12" style="height:100vh;">
+        <div className="lg:hidden fixed inset-x-0 top-16 sm:top-20 bottom-0 bg-[#07090b]/98 backdrop-blur-2xl border-t border-white/[0.1] z-50 flex flex-col justify-between overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200 px-6 py-6 pb-12" style={{ height: "100vh" }}>
           {/* Nav List */}
           <div className="space-y-1">
             <div className="flex items-center justify-between pb-2 border-b border-white/[0.06] mb-3">
