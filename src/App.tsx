@@ -19,6 +19,8 @@ import { ScrollProgress } from './components/ScrollProgress';
 import { ScrollReveal } from './components/ScrollReveal';
 import { REAL_PORTFOLIO, PortfolioItem } from './data/projects';
 import { ThemeProvider } from './context/ThemeContext';
+import { TiltProvider } from './context/TiltContext';
+import { TiltBadge } from './components/TiltBadge';
 import { ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -58,7 +60,8 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-[#07090b] text-[#f1f5f9] flex flex-col selection:bg-[#39ff14] selection:text-black">
+      <TiltProvider>
+        <div className="min-h-screen bg-[#07090b] text-[#f1f5f9] flex flex-col selection:bg-[#39ff14] selection:text-black">
         {/* Top Neon-Lime Scroll Progress Tracker */}
         <ScrollProgress />
 
@@ -120,23 +123,29 @@ export default function App() {
           onContactClick={scrollToContact}
         />
 
-        {/* Floating Animated Scroll-To-Top Button */}
-        <AnimatePresence>
-          {showScrollTop && (
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8, y: 20 }}
-              transition={{ duration: 0.2 }}
-              onClick={scrollToTop}
-              aria-label="Scroll to top of page"
-              className="fixed bottom-6 right-6 z-40 p-3 rounded-xl bg-[#0d1117]/90 hover:bg-[#39ff14] text-slate-300 hover:text-black border border-white/[0.1] hover:border-[#39ff14] backdrop-blur-md shadow-2xl transition-all duration-300 box-glow-lime cursor-pointer group"
-            >
-              <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
-            </motion.button>
-          )}
-        </AnimatePresence>
-      </div>
+          {/* Floating Subtle 3D Tilt Status Pill (Bottom-Left) */}
+          <div className="fixed bottom-6 left-6 z-40 hidden sm:block">
+            <TiltBadge />
+          </div>
+
+          {/* Floating Animated Scroll-To-Top Button */}
+          <AnimatePresence>
+            {showScrollTop && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.8, y: 20 }}
+                transition={{ duration: 0.2 }}
+                onClick={scrollToTop}
+                aria-label="Scroll to top of page"
+                className="fixed bottom-6 right-6 z-40 p-3 rounded-xl bg-[#0d1117]/90 hover:bg-[#39ff14] text-slate-300 hover:text-black border border-white/[0.1] hover:border-[#39ff14] backdrop-blur-md shadow-2xl transition-all duration-300 box-glow-lime cursor-pointer group"
+              >
+                <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
+              </motion.button>
+            )}
+          </AnimatePresence>
+        </div>
+      </TiltProvider>
     </ThemeProvider>
   );
 }

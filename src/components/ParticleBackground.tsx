@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useTilt } from '../context/TiltContext';
 
 interface Particle {
   x: number;
@@ -13,6 +14,13 @@ interface Particle {
 
 export const ParticleBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { tiltX, tiltY, isEnabled } = useTilt();
+  const tiltRef = useRef({ x: 0, y: 0, enabled: true });
+
+  useEffect(() => {
+    tiltRef.current = { x: tiltX, y: tiltY, enabled: isEnabled };
+  }, [tiltX, tiltY, isEnabled]);
+
   const mouseRef = useRef<{ x: number | null; y: number | null; radius: number }>({
     x: null,
     y: null,
@@ -101,9 +109,11 @@ export const ParticleBackground: React.FC = () => {
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
-        // Move particle
-        p.x += p.vx;
-        p.y += p.vy;
+        // Move particle with ambient velocity plus physical phone tilt gravity
+        const driftX = tiltRef.current.enabled ? tiltRef.current.x * 0.45 : 0;
+        const driftY = tiltRef.current.enabled ? tiltRef.current.y * 0.45 : 0;
+        p.x += p.vx + driftX;
+        p.y += p.vy + driftY;
 
         // Bounce gently at canvas edges
         if (p.x < 0) {

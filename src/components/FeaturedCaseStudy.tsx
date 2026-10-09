@@ -1,6 +1,8 @@
 import React from 'react';
 import { REAL_PORTFOLIO, PortfolioItem } from '../data/projects';
 import { ArrowUpRight, CheckCircle2, ShieldCheck, Globe } from 'lucide-react';
+import { useTilt } from '../context/TiltContext';
+import { motion } from 'motion/react';
 
 interface FeaturedCaseStudyProps {
   onSelectProject: (project: PortfolioItem) => void;
@@ -12,6 +14,7 @@ export const FeaturedCaseStudy: React.FC<FeaturedCaseStudyProps> = ({
   onContactClick,
 }) => {
   const project = REAL_PORTFOLIO[0]; // Badger Tobacco
+  const { tiltX, tiltY, isEnabled, isMobile } = useTilt();
 
   return (
     <section id="case-study" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
@@ -99,12 +102,31 @@ export const FeaturedCaseStudy: React.FC<FeaturedCaseStudyProps> = ({
             </div>
           </div>
 
-          {/* Right Column: Visual Showcase Frame */}
-          <div className="lg:col-span-6 relative">
-            <div
+          {/* Right Column: Visual Showcase Frame with 3D Gyro Tilt */}
+          <div className="lg:col-span-6 relative [perspective:1000px]">
+            <motion.div
               onClick={() => onSelectProject(project)}
-              className="relative rounded-2xl overflow-hidden border border-white/[0.15] bg-black/60 shadow-2xl group cursor-pointer"
+              style={{
+                rotateX: isEnabled ? -tiltY * 8 : 0,
+                rotateY: isEnabled ? tiltX * 8 : 0,
+                transformStyle: 'preserve-3d',
+              }}
+              className="relative rounded-2xl overflow-hidden border border-white/[0.15] bg-black/60 shadow-2xl group cursor-pointer will-change-transform"
             >
+              {/* Specular glare sheen */}
+              <div
+                style={{
+                  background: `radial-gradient(circle 380px at ${
+                    50 + tiltX * 42
+                  }% ${
+                    50 + tiltY * 42
+                  }%, rgba(57, 255, 20, 0.2), rgba(0, 245, 212, 0.1), transparent 70%)`,
+                }}
+                className={`absolute inset-0 pointer-events-none transition-opacity duration-300 z-20 ${
+                  isEnabled && isMobile ? 'opacity-40' : 'opacity-0 group-hover:opacity-100'
+                }`}
+              />
+
               <img
                 src={project.image}
                 alt={`${project.title} - ${project.subtitle}`}
@@ -114,14 +136,14 @@ export const FeaturedCaseStudy: React.FC<FeaturedCaseStudyProps> = ({
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-50" />
 
               {/* In-Frame Status Tag */}
-              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs font-mono">
+              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs font-mono [transform:translateZ(25px)]">
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/70 backdrop-blur border border-white/[0.1] text-white">
                   <span className="w-2 h-2 rounded-full bg-[#39ff14] animate-pulse" />
                   <span>{project.categoryLabel}</span>
                 </div>
                 <div className="text-slate-300">Click to Expand</div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

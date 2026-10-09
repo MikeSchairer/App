@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { BrandLockup } from './Logo';
 import { ParticleBackground } from './ParticleBackground';
 import { RESUME_URL } from '../data/projects';
+import { useTilt } from '../context/TiltContext';
+import { TiltBadge } from './TiltBadge';
 import { ArrowDown, FileText, Check, Copy, ExternalLink, Sparkles } from 'lucide-react';
+import { motion } from 'motion/react';
 
 interface HeroProps {
   onExploreClick: () => void;
@@ -12,6 +15,7 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = ({ onExploreClick, onContactClick }) => {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const email = 'Mike.Schairer@gmail.com';
+  const { tiltX, tiltY, isEnabled } = useTilt();
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(email);
@@ -35,23 +39,60 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onContactClick }) =>
       <div className="absolute inset-0 bg-radial-spotlight pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-b from-[#07090b]/80 via-transparent to-[#07090b] pointer-events-none" />
 
-      {/* Decorative neon ambient orbs in corners */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#39ff14]/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-1/3 left-1/3 w-72 h-72 bg-[#00f0ff]/8 rounded-full blur-[100px] pointer-events-none" />
+      {/* Decorative neon ambient orbs reacting with 3D counter-parallax */}
+      <div
+        style={{
+          transform: `translate(${tiltX * -45}px, ${tiltY * -45}px)`,
+        }}
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#39ff14]/12 rounded-full blur-[120px] pointer-events-none will-change-transform"
+      />
+      <div
+        style={{
+          transform: `translate(${tiltX * 55}px, ${tiltY * 55}px)`,
+        }}
+        className="absolute top-1/3 left-1/3 w-72 h-72 bg-[#00f0ff]/10 rounded-full blur-[100px] pointer-events-none will-change-transform"
+      />
 
-      <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center">
-        {/* Availability Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
-          <span className="w-2 h-2 rounded-full bg-[#39ff14] shadow-[0_0_8px_#39ff14] animate-pulse" />
-          <span className="text-xs font-mono tracking-wide text-slate-300">
-            Available for Freelance & Custom Web Projects
-          </span>
+      <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center [perspective:1200px]">
+        {/* Availability Badge & Tilt Gyroscope Pill */}
+        <div className="flex flex-wrap items-center justify-center gap-3 mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
+            <span className="w-2 h-2 rounded-full bg-[#39ff14] shadow-[0_0_8px_#39ff14] animate-pulse" />
+            <span className="text-xs font-mono tracking-wide text-slate-300">
+              Available for Freelance & Custom Web Projects
+            </span>
+          </div>
+
+          {/* 3D Motion / Tilt Pill */}
+          <TiltBadge />
         </div>
 
-        {/* Hero Brand Centerpiece — Exactly styled after the provided logo */}
-        <div className="mb-6 transform hover:scale-[1.02] transition-transform duration-500">
-          <BrandLockup size="hero" glow={true} centered={true} />
-        </div>
+        {/* Hero Brand Centerpiece — 3D Holographic Parallax Monogram reacting to phone tilt */}
+        <motion.div
+          style={{
+            rotateX: isEnabled ? -tiltY * 18 : 0,
+            rotateY: isEnabled ? tiltX * 18 : 0,
+            transformStyle: 'preserve-3d',
+          }}
+          className="mb-6 relative will-change-transform"
+        >
+          {/* Dynamic Specular Holographic Glare sweep */}
+          <div
+            style={{
+              background: `radial-gradient(circle 300px at ${
+                50 + tiltX * 45
+              }% ${
+                50 + tiltY * 45
+              }%, rgba(242, 255, 90, 0.28), rgba(57, 255, 20, 0.15), rgba(0, 240, 255, 0.08), transparent 70%)`,
+              opacity: isEnabled ? 0.85 : 0,
+            }}
+            className="absolute -inset-10 pointer-events-none rounded-full blur-xl transition-opacity duration-300 z-30"
+          />
+
+          <div className="transform hover:scale-[1.02] transition-transform duration-500 [transform:translateZ(30px)]">
+            <BrandLockup size="hero" glow={true} centered={true} />
+          </div>
+        </motion.div>
 
         {/* Disciplines Kicker Line from Michael's site */}
         <div className="text-xs sm:text-sm font-mono tracking-wider text-[#00f5d4] uppercase mb-6 flex flex-wrap items-center justify-center gap-2">

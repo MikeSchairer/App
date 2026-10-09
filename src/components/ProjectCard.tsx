@@ -1,7 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { PortfolioItem } from '../data/projects';
 import { ArrowUpRight } from 'lucide-react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
+import { useTilt } from '../context/TiltContext';
 
 interface ProjectCardProps {
   project: PortfolioItem;
@@ -15,8 +16,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   featuredSpan = false,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const isHoveredRef = useRef(false);
+  const { tiltX, tiltY, isEnabled, isMobile } = useTilt();
 
-  // Motion values for normalized cursor coordinates (-0.5 to 0.5)
+  // Motion values for normalized coordinates (-0.5 to 0.5)
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -25,15 +28,21 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   const mouseXSpring = useSpring(x, springConfig);
   const mouseYSpring = useSpring(y, springConfig);
 
-  // 3D rotation transforms (subtle 8 degree max tilt)
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], [8.5, -8.5]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], [-8.5, 8.5]);
+  // Sync with device tilt when not actively hovered with desktop mouse
+  useEffect(() => {
+    if (!isHoveredRef.current && isEnabled) {
+      // Map tilt (-1 to +1) to card rotation coordinates (-0.5 to +0.5)
+      x.set(tiltX * 0.45);
+      y.set(tiltY * 0.45);
+    }
+  }, [tiltX, tiltY, isEnabled, x, y]);
 
-  // Dynamic specular glare translation
-  const glareX = useTransform(mouseXSpring, [-0.5, 0.5], ['0%', '100%']);
-  const glareY = useTransform(mouseYSpring, [-0.5, 0.5], ['0%', '100%']);
+  // 3D rotation transforms (subtle 9 degree max tilt)
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], [9, -9]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], [-9, 9]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    isHoveredRef.current = true;
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const width = rect.width;
@@ -51,8 +60,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   };
 
   const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
+    isHoveredRef.current = false;
+    if (isEnabled) {
+      x.set(tiltX * 0.45);
+      y.set(tiltY * 0.45);
+    } else {
+      x.set(0);
+      y.set(0);
+    }
   };
 
   return (
@@ -76,13 +91,18 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         transition={{ duration: 0.2 }}
         className="group relative flex flex-col justify-between rounded-2xl bg-[#0d1117] border border-white/[0.08] hover:border-[#39ff14]/50 transition-colors duration-300 overflow-hidden cursor-pointer h-full will-change-transform shadow-lg hover:shadow-[0_15px_35px_-10px_rgba(57,255,20,0.2)]"
       >
-        {/* Dynamic Specular Glare Overlay */}
-        <motion.div
+        {/* Dynamic Specular Holographic Glare Overlay */}
+        <div
           style={{
-            background:
-              'radial-gradient(circle 300px at var(--glare-x, 50%) var(--glare-y, 50%), rgba(57, 255, 20, 0.12), transparent 70%)',
+            background: `radial-gradient(circle 350px at ${
+              50 + tiltX * 42
+            }% ${
+              50 + tiltY * 42
+            }%, rgba(57, 255, 20, 0.22), rgba(0, 245, 212, 0.12), transparent 70%)`,
           }}
-          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"
+          className={`absolute inset-0 pointer-events-none transition-opacity duration-300 z-20 ${
+            isEnabled && isMobile ? 'opacity-40' : 'opacity-0 group-hover:opacity-100'
+          }`}
         />
 
         {/* Visual Image Container */}

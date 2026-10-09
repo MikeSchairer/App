@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { LogoMark } from './Logo';
 import { useTheme } from '../context/ThemeContext';
+import { useTilt } from '../context/TiltContext';
 import { RESUME_URL } from '../data/projects';
-import { Menu, X, ArrowUpRight, FileText, ChevronRight, Sun, Moon } from 'lucide-react';
+import { Menu, X, ArrowUpRight, FileText, ChevronRight, Sun, Moon, Compass } from 'lucide-react';
 
 interface NavbarProps {
   onContactClick: () => void;
@@ -10,8 +11,17 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ onContactClick }) => {
   const { theme, toggleTheme } = useTheme();
+  const { isEnabled, toggleTilt, permission, requestPermission, isMobile } = useTilt();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const handleMotionClick = () => {
+    if (isMobile && permission === 'prompt') {
+      requestPermission();
+    } else {
+      toggleTilt();
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -100,6 +110,36 @@ export const Navbar: React.FC<NavbarProps> = ({ onContactClick }) => {
 
         {/* Zone 3: Desktop Buttons & Theme Toggle & High-Visibility Mobile Menu Button */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* 3D Motion / Tilt Mode Toggle */}
+          <button
+            onClick={handleMotionClick}
+            className={`p-2 sm:px-2.5 sm:py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border transition-all cursor-pointer flex items-center gap-1.5 group select-none ${
+              isEnabled
+                ? 'border-[#39ff14]/40 text-[#39ff14] shadow-[0_0_10px_rgba(57,255,20,0.15)]'
+                : 'border-white/[0.1] text-slate-400'
+            }`}
+            aria-label={isEnabled ? 'Disable 3D tilt effects' : 'Enable 3D tilt effects'}
+            title={
+              isMobile && permission === 'prompt'
+                ? 'Enable 3D phone tilt'
+                : isEnabled
+                ? '3D Tilt Active (Click to pause)'
+                : 'Click to enable 3D tilt'
+            }
+          >
+            <Compass
+              className={`w-4 h-4 transition-transform ${
+                isEnabled ? 'text-[#39ff14] group-hover:rotate-45' : 'text-slate-500'
+              }`}
+            />
+            <span className="text-[10px] font-mono font-medium hidden lg:inline">
+              {isEnabled ? '3D' : 'Flat'}
+            </span>
+            {isEnabled && (
+              <span className="w-1.5 h-1.5 rounded-full bg-[#39ff14] shadow-[0_0_6px_#39ff14] animate-pulse hidden sm:inline-block" />
+            )}
+          </button>
+
           {/* Theme Toggle Button (Desktop & Mobile) */}
           <button
             onClick={toggleTheme}
@@ -218,6 +258,26 @@ export const Navbar: React.FC<NavbarProps> = ({ onContactClick }) => {
 
           {/* Action Area at bottom of Mobile Drawer */}
           <div className="space-y-3 pt-6 border-t border-white/[0.1] mt-6">
+            {/* 3D Motion Toggle in Mobile Drawer */}
+            <button
+              onClick={() => {
+                handleMotionClick();
+              }}
+              className={`w-full py-3 px-4 text-center text-xs font-mono font-semibold rounded-xl border flex items-center justify-between cursor-pointer active:scale-[0.98] transition-all ${
+                isEnabled
+                  ? 'bg-[#39ff14]/10 border-[#39ff14]/40 text-[#39ff14]'
+                  : 'bg-white/[0.04] border-white/[0.1] text-slate-300'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Compass className={`w-4 h-4 ${isEnabled ? 'text-[#39ff14]' : 'text-slate-400'}`} />
+                <span>3D Gyroscope Motion</span>
+              </div>
+              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${isEnabled ? 'bg-[#39ff14] text-black' : 'bg-white/10 text-slate-400'}`}>
+                {isEnabled ? 'ENABLED' : 'DISABLED'}
+              </span>
+            </button>
+
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
